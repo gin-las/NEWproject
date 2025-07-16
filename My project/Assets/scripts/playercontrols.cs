@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Cryptography;
+using UnityEngine.SceneManagement;
+
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -89,5 +91,25 @@ public class playercontrols : MonoBehaviour
         {
             Tryjump();
         }
+        if(health <= 0){
+        anime.SetBool("death", true);
+        StartCoroutine("DieButCool");
+        }
+
+        IEnumerator DieButCool(){
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadScene(0);
+        }
+
+
     }
+
+    private void OnTriggerEnter(Collider other){
+          if(other.gameObject.name   == "enemy"){
+                health -=10;
+          }
+          if(other.gameObject.name == "FallCollider"){
+                SceneManager.LoadScene(0);
+          }
+   }
 }
