@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Windows;
+using Input = UnityEngine.Input;
 
 public class playercontrols : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class playercontrols : MonoBehaviour
     public float jumpForce;
     public Rigidbody rig;
     public int health;
+
+    public Animator anime;
 
     public int coinCount;
 
@@ -36,6 +40,15 @@ public class playercontrols : MonoBehaviour
 
         //rig.MoveRotation(rig.rotation * angleRot);
 
+        // if we are moving play running animation otherwise play idle
+        if (Mathf.Abs(x) > 0.1f || Mathf.Abs(z) > 0.1f)
+        {
+            anime.SetBool("isRunning", true);
+        }
+        else
+        {
+            anime.SetBool("isRunning", false);
+        }
     }
 
     void Tryjump()
@@ -45,6 +58,8 @@ public class playercontrols : MonoBehaviour
 
         //shoot the raycast
         if (Physics.Raycast(ray, 1.5f)) {
+            anime.SetTrigger("isJumping");
+            
             rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
